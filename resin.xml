@@ -1,0 +1,173 @@
+<!--
+   - Resin 4.0 configuration file. Resin 4.0配置文件
+  -->
+<!-- 配置文件的根为Resin，引用约束 -->
+<resin xmlns="http://caucho.com/ns/resin"
+       xmlns:resin="urn:java:com.caucho.resin">
+
+  <!-- property-based Resin configuration     
+  Resin配置的基本属性-->
+  <resin:properties path="${__DIR__}/resin.properties" optional="true"/>
+
+  <resin:if test="${properties_import_url}">
+     <resin:properties path="${properties_import_url}"
+                    optional="true" recover="true"/>
+  </resin:if>
+
+
+  <!-- Logging configuration for the JDK logging API 
+  配置JDK日志接口-->
+  <log-handler name="" level="all" path="stdout:"
+               timestamp="[%y-%m-%d %H:%M:%S.%s]"
+               format=" {${thread}} ${log.message}"/>
+               
+  <!-- 
+     - Alternative pseudo-TTCC log format
+     -
+     - <log-handler name="" level="all" path="stdout:"
+     -           timestamp="%y-%m-%d %H:%M:%S.%s"
+     -           format=" [${thread}] ${log.level} ${log.shortName} - ${log.message}"/>
+    -->
+   
+  <!--
+     - level='info' for production
+     - 'fine' or 'finer' for development and troubleshooting
+    -->
+  <logger name="" level="${log_level?:'info'}"/>
+
+  <logger name="com.caucho.java" level="config"/>
+  <logger name="com.caucho.loader" level="config"/>
+
+  <!--
+     - Default configuration applied to all clusters, including
+     - HTTP, HTTPS, and /resin-admin configuration.
+	 应用于所有集群的默认配置，包括http https 和resin-admin 的配置
+    -->
+  <resin:import path="${__DIR__}/cluster-default.xml"/>
+  
+  <!--
+     - health configuration
+	 健康配置
+    -->
+  <resin:import path="${__DIR__}/health.xml"/>
+
+  
+  <!--
+     - Remote management requires at least one enabled admin user.
+	 远程管理需要至少一个启用的admin用户
+    -->
+  <resin:AdminAuthenticator>
+    <user name="${admin_user}" password="${admin_password}"/>
+    
+    <resin:import path="${__DIR__}/admin-users.xml" optional="true"/>
+  </resin:AdminAuthenticator>
+
+  <!--
+     - For clustered systems, create a password in as cluster_system_key
+	 服务于集群系统，创建一个密码作为集群系统的key
+    -->
+  <cluster-system-key>${cluster_system_key}</cluster-system-key>
+
+  <!--
+     - For production sites, change dependency-check-interval to something
+     - like 600s, so it only checks for updates every 10 minutes.
+	 为生产环境，改变依赖检查间隔的值，像600秒，则它只会每个10分钟检查更新
+    -->
+  <dependency-check-interval>${dependency_check_interval?:'2s'}</dependency-check-interval>
+
+  <!-- For resin.properties dynamic cluster joining 
+  为了resin属性动态的集群加入-->
+  <home-cluster>${home_cluster}</home-cluster>
+  <home-server>${home_server}</home-server>
+  <elastic-server>${elastic_server}</elastic-server>
+  <elastic-dns>${elastic_dns}</elastic-dns>
+
+  <!--
+     - Configures the main application cluster.  Load-balancing configurations
+     - will also have a web cluster.
+	 配置主要的应用集群，负载均衡配置也将会有一个web集群
+    -->
+<!-- 配置cluster,指定唯一id -->
+  <cluster id="app">
+    <!-- define the servers in the cluster 
+	定义本集群中的服务器servers-->
+	
+    <server-multi id-prefix="app-" address-list="${app_servers}" port="6800"/>
+	<!-- 默认host -->
+    <host-default>
+      <!-- creates the webapps directory for .war expansion 
+	  为后缀为.war扩展名的文件创建目录-->
+	  
+	  <!-- web-app-deploy部署配置，path指定路径 -->
+      <web-app-deploy path="webapps"
+                      expand-preserve-fileset="WEB-INF/work/**"
+                      multiversion-routing="${webapp_multiversion_routing}"
+                      path-suffix="${elastic_webapp?resin.id:''}"/>
+    </host-default>
+
+    <!-- auto virtual host deployment in hosts/foo.example.com/webapps 
+	在hosts/foo.example.com/webapps中的自动虚拟主机开开发-->
+	
+	
+    <host-deploy path="hosts">
+      <host-default>
+        <resin:import path="host.xml" optional="true"/>
+      </host-default>
+    </host-deploy>
+
+    <!-- the default host, matching any host name 
+	默认的host，匹配所有的host名字-->
+    <host id="" root-directory=".">
+      <!--
+         - webapps can be overridden/extended in the resin.xml
+        webapps能够在resin.xml中被重写或者扩展-->
+      <web-app id="/" root-directory="webapps/ROOT"/>
+
+    </host>
+      
+    <resin:if test="${resin_doc}">
+      <host id="${resin_doc_host}" root-directory="${resin_doc_host}">
+        <web-app id="/resin-doc" root-directory="${resin.root}/doc/resin-doc"/>
+      </host>
+    </resin:if>
+  </cluster>
+
+  <cluster id="web">
+    <!-- define the servers in the cluster -->
+    <server-multi id-prefix="web-" address-list="${web_servers}" port="6810"/>
+
+    <host id="" root-directory="web">
+      <web-app id="">
+        <resin:LoadBalance regexp="" cluster="app"/>
+      </web-app>
+    </host>
+  </cluster>
+
+ <!-- memcache集群配置 -->
+  <cluster id="memcached" xmlns:memcache="urn:java:com.caucho.memcached">
+    <!-- define the servers in the cluster -->
+    <server-multi id-prefix="memcached-" address-list="${memcached_servers}" port="6820">
+      <!-- listen for the memcache protocol -->
+      <listen port="${memcached_port?:11211}"
+              keepalive-timeout="600s" socket-timeout="600s">
+        <memcache:MemcachedProtocol/>
+      </listen>
+    </server-multi>
+  </cluster>
+  
+  <!-- 代理缓存配置 -->
+  <cluster id="proxycache">
+    <!-- define the servers in the cluster -->
+    <server-multi id-prefix="proxycache-" address-list="${proxycache_servers}" port="6830"/>
+
+    <host id="" root-directory="proxycache">
+      <web-app id="">
+        <resin:HttpProxy regexp=".*">
+          <!-- backend HTTP servers to proxy to -->
+          <addresses>${backend_servers}</addresses>
+        </resin:HttpProxy>
+      </web-app>
+    </host>
+  </cluster>
+
+</resin>

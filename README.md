@@ -1,2 +1,2 @@
 # resin_study
-resin服务搭建
+resin 学习、服务搭建

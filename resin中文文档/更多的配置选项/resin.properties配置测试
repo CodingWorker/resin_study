@@ -1,0 +1,71 @@
+             ☆☆☆☆☆☆☆ resin.properties 配置测试 ☆☆☆☆☆☆☆
+			 
+1. resin.properties 是k-v的集合
+2. resin.properties 是变量的集合，被用来作为resin.xml的配置
+
+示例：
+	app_servers : 127.0.0.1:6800
+	app.http : 8080                 #指定app集群的默认端口
+	setuid_user : resin             #运行resin的用户
+	setuid_group : resin            #运行resin的组
+	
+	jvm_args : -Xmx2G -XX:MaxPermSize=256m
+
+
+示例：	
+    setuid_user : resin             #运行resin的用户
+	setuid_group : resin            #运行resin的组
+	http       : 8080    # default value if unspecified
+	app-0.http : 8081    # server 'app-0' uses 8081    #指定app-0监听的端口，即访问应用的时候使用这个端口访问
+	app-1.http : 8082    # server 'app-1' uses 8082    #指定app-1监听的端口
+	app.http   : 8089    # app集群的默认端口
+	app-0.http : 8091    #如果没有特别别指定，则app-n监听这里指定的端口
+	web.http   : 8090    #类似app，指定web的端口
+	dependency_check_interval : 5m
+	
+	#启用负载均衡
+	proxy_cache_enable : true                     #启用代理缓存
+	proxy_cache_size   : 256m                     #代理缓存的大小
+	
+	memcached_servers   : 127.0.0.1:6820      #memcached服务的ip和端口
+	memcached_port      : 11211               #memcached的端口
+	memcached.http      : 8080                #resin和REST管理的HTTP端口
+	
+	jvm_args : -Xmx2G -XX:MaxPermSize=256m
+
+	
+	
+
+配置项 ：dependency_check_interval : 5m
+设置定时更新类和依赖的间隔时间，可能值为2s-2秒，5m为5分钟
+可以用于:
+
+	 <dependency-check-interval>${dependency_check_interval?:'2s'}</dependency-check-interval>
+	 
+web负载均衡关键配置属性
+	web_servers : 127.0.0.1:6810                  #web服务器集群
+	web.http    : 80    HTTP端口
+
+	proxy_cache_enable : true                     #启用代理缓存
+	proxy_cache_size   : 256m                     #代理缓存的大小
+
+	app_servers : 127.0.0.1:6800
+	app.http    : 8080
+
+	setuid_user : resin
+	setuid_group : resin
+
+	jvm_args : -Xmx2G -XX:MaxPermSize=256m
+
+
+memcached 层关键属性：
+	memcached_servers   : 127.0.0.1:6820      #memcached服务的ip和端口
+	memcached_port      : 11211               #memcached的端口
+	memcached.http      : 8080                #resin和REST管理的HTTP端口
+
+	 
+	 
+	 
+	 
+	 
+	 

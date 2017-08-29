@@ -1,0 +1,57 @@
+                          ☆☆☆☆☆☆☆ deploy applications ☆☆☆☆☆☆☆
+		
+Resin支持在线热部署和下线应用/app
+#1 部署
+只需要提供web service的.war文件（使用war expluded,此时不会打包，如果为war则会打包）
+
+部署为单独的App:
+	./bin/resin.sh deploy /path/to/hello.war 
+	
+
+之后访问http://myresin.com:8080/hello即访问的是这个app
+另外，在这个hello的应用总存在web.xml文件可以配置这个app
+
+
+此外，Resin还支持将app部署到ROOT目录即web的默认访问目录
+	./bin/resin.sh deploy --name ROOT /path/to/hello.war
+	然后执行下线ROOT应用：
+	./bin/resin.sh undeploy --user username --password password --name ROOT
+	
+此时访问web的根路径http://myresin.com:8080则访问的是hello的默认页面
+实际的操作就是将hello.war的文件拷贝到了ROOT目录
+
+
+在执行的过程中，可能部署失败，提示给出管理员的username和password，此时名变为：
+	./bin/resin.sh deploy --user username --password password /path/to/hello.war
+	./bin/resin.sh deploy --name ROOT --user username --password password /path/to/hello.war
+
+
+#2 下线
+Resin支持在线下线某个app：
+	./bin/resin.sh undeploy --user username --password password hello 
+	1. hello即为部署到webapps是的目录名
+	2. 如果需要指定用户名和密码的话提供用户名和密码
+	
+
+另外，如果配置了参数admin_remote_enable为true，也可以远程部署：
+admin_user          : my-user
+admin_password      : {SSHA}HTfP60Ceq0K0IAvN31wQtBxtql0D+8Wo
+admin_remote_enable : true
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

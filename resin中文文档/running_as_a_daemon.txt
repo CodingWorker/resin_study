@@ -1,0 +1,9 @@
+		        ☆☆☆☆☆☆☆ Running Resin as a Daemon ☆☆☆☆☆☆☆
+				
+Resin默认就是以守护进程的方式启动
+	./bin/resin.sh start
+	./bin/resin.sh restart
+	./bin/resin.sh stop 
+	
+如果需要查看服务启动的输出，可以
+	./bin/resin.sh console

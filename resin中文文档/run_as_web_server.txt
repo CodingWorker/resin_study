@@ -1,0 +1,59 @@
+                   ☆☆☆☆☆☆☆Resin as a web server☆☆☆☆☆☆☆
+				   
+在快速部署的基础上，假设我们这里已经有了一个可以良好运行的Resin web sever
+
+启动Resin:
+	./bin/resin.sh start     #默认以后台启动
+	可以查看，ps -ef | grep resin
+
+已调试的状态启动：
+	./bin/resin.sh console   #会将启动的信息输出到终端
+	
+
+	
+基于web 管理Resin
+方法一：
+1. 首次启动resin后，访问管理页面：
+		http://myresin.com/resin-admin/
+	会给出登录页面
+	
+2. 为了登录管理，需要创建一个用户，Resin会自动在Resin.properties里面增加增加admin_user和admin_password的两个k-v值，密码是经过加密的
+
+admin_user : my-user
+admin_password : {SSHA}rfP0SBMXYKBpr71nRyng+QI3NZyeluMh
+
+然后在admin-user.xml里面也增加了这样的xml配置：
+	<user name="Daniel password="{SSHA}uWGGLuCi2bs+VCH1QTjcYu7cBlW/eHa1"/>
+
+此时，可以登录这个管理页面，看到服务器状态的一些信息
+
+方法二：
+自己在shell创建一个密码，使用generate-password
+	命令格式：generate-password username password
+然后它会输出：
+admin_user : username
+admin_password : {SSHA}dfP0ScMXYKBpf71dRyng}
+
+我们只需要此输出拷贝到resin.properties即可
+
+简写命令：./resin.sh generate-password user password >> /etc/conf/resin/resin.properties
+
+更新admin-user.xml（如果文件不存在则创建）添加：
+<user name="Daniel password="{SSHA}uWGGLuCi2bs+VCH1QTjcYu7cBlW/eHa1"/>
+
+
+访问http://myresion.com:8080/resin-admin/,如果登录不了可能需要重启Resin服务器
+	./bin/resin.sh restart
+	
+
+
+
+
+
+
+	
+	
+	
+	
+
+

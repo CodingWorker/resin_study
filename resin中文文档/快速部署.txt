@@ -1,0 +1,94 @@
+参考官方文档：
+1. 快速苏安装和部署
+1) 环境要求
+    a) jdk >= 6.0
+	b) browser support HTML5
+	
+2) download: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+3) unpressed
+3) directory tree
+	[resiner@master resin-4.0.53]$ ll
+	total 1260
+	-rw-r--r-- 1 resiner resiner 351029 Jun 16 14:25 aclocal.m4
+	drwxr-xr-x 2 resiner resiner   4096 Aug 22 19:32 automake
+*	drwxrwxr-x 2 resiner resiner   4096 Aug 23 20:15 bin             #bash脚本
+	drwxr-xr-x 2 resiner resiner   4096 Jun 16 14:25 compat
+*	drwxr-xr-x 3 resiner resiner   4096 Aug 25 03:16 conf            #配置文件
+	-rwxrwxr-x 1 resiner resiner 596224 Jun 16 14:25 configure
+	-rwxrwxr-x 1 resiner resiner  39509 Jun 16 14:25 configure.ac
+	drwxr-xr-x 4 resiner resiner   4096 Jun 16 14:25 contrib
+*	drwxr-xr-x 5 resiner resiner   4096 Jun 16 14:25 doc              #文档
+	drwxr-xr-x 2 resiner resiner   4096 Aug 22 19:32 endorsed
+	drwxr-xr-x 2 resiner resiner   4096 Jun 16 14:25 ext-lib
+	drwxrwxr-x 3 resiner resiner   4096 Aug 23 02:45 hosts
+	drwxr-xr-x 2 resiner resiner   4096 Aug 22 19:32 init.d
+	drwxr-xr-x 2 resiner resiner   4096 Jun 16 14:25 keys
+	drwxr-xr-x 2 resiner resiner   4096 Aug 22 19:32 lib
+	-rw-r--r-- 1 resiner resiner  18009 Jun 16 14:24 LICENSE
+	drwxr-xr-x 2 resiner resiner   4096 Jun 16 14:25 licenses
+*	drwxrwxr-x 2 resiner resiner   4096 Aug 28 23:02 log             #日志
+	-rw-r--r-- 1 resiner resiner  11577 Jun 16 14:24 Makefile.am
+	-rw-r--r-- 1 resiner resiner  33378 Jun 16 14:25 Makefile.in
+	drwxrwxr-x 3 resiner resiner   4096 Aug 22 19:32 modules
+	drwxr-xr-x 2 resiner resiner   4096 Aug 22 19:32 project-jars
+	-rw-r--r-- 1 resiner resiner   4313 Jun 16 14:24 README
+	drwxrwxr-x 3 resiner resiner   4096 Aug 22 19:52 resin-data
+	-rwxrwxr-x 1 resiner resiner  30720 Jun 16 14:24 resin.exe
+	-rwxrwxr-x 1 resiner resiner  97280 Jun 16 14:24 setup.exe
+	drwxrwxr-x 3 resiner resiner   4096 Aug 22 19:58 watchdog-data
+	drwxr-xr-x 2 resiner resiner   4096 Aug 22 19:32 webapp-jars
+*	drwxr-xr-x 4 resiner resiner   4096 Aug 24 19:24 webapps         #部署目录
+	drwxrwxr-x 4 resiner resiner   4096 Aug 22 19:32 win32
+	drwxrwxr-x 2 resiner resiner   4096 Aug 22 19:32 win64
+
+	
+安装Resin - 在Centos 6
+
+./configure --prefix=/path/to/resin
+make
+sudo make install
+
+resin是由java编写的服务器，因此也可以由jar来启动，运行命令：
+java -jar lib/resin.jar start
+	
+此时，一个默认的web即部署完成并启动了，浏览器访问8080
+http://myresin.com:8080 访问默认web的默认页面index.html
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
